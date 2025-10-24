@@ -1,0 +1,27 @@
+{
+    "name": "greenbox",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*",
+        "general": "github:etmbit/general#4ea1e3f3224a0692900d0a9e2898a515af73c9a0",
+        "timing": "github:etmbit/timing#fc27a447ed1c0b8e0bbc97d0041471705233ad7d"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "8.0.17",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj"
+}
