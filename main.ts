@@ -528,83 +528,6 @@ namespace GreenBox {
         return LIGHT
     }
 
-    //% block="bone-dry"
-    //% block.loc.nl="kurkdroog"
-    //% group="•"
-    export function moisture0(): number {
-        return 25
-    }
-
-    //% block="dry"
-    //% block.loc.nl="droog"
-    //% group="•"
-    export function moisture1(): number {
-        return 50
-    }
-
-    //% block="moist"
-    //% block.loc.nl="vochtig"
-    //% group="•"
-    export function moisture2(): number {
-        return 65
-    }
-
-    //% block="wet"
-    //% block.loc.nl="nat"
-    //% group="•"
-    export function moisture3(): number {
-        return 80
-    }
-
-    //% block="soaking"
-    //% block.loc.nl="doornat"
-    //% group="•"
-    export function moisture4(): number {
-        return 95
-    }
-
-    //% block="dark"
-    //% block.loc.nl="donker"
-    //% group="•"
-    export function light0(): number {
-        return 25
-    }
-
-    //% block="dusk"
-    //% block.loc.nl="schemer"
-    //% group="•"
-    export function light1(): number {
-        return 50
-    }
-
-    //% block="lucid"
-    //% block.loc.nl="helder"
-    //% group="•"
-    export function light2(): number {
-        return 65
-    }
-
-    //% block="bright"
-    //% block.loc.nl="fel"
-    //% group="•"
-    export function light3(): number {
-        return 80
-    }
-
-    //% block="off"
-    //% block.loc.nl="uit"
-    //% group="•"
-    export function off(): number {
-        return 0
-    }
-
-    //% block="on"
-    //% block.loc.nl="aan"
-    //% group="•"
-    export function on(): number {
-        return 100
-    }
-
     //% block="moisture"
     //% block.loc.nl="grondvochtigheid"
     export function moisture(): number {
@@ -621,5 +544,82 @@ namespace GreenBox {
     //% block.loc.nl="temperatuur"
     export function temperature(): number {
         return TEMPHUM[Temperature]
+    }
+
+    //% subcategory="Waardes"
+    //% block="bone-dry"
+    //% block.loc.nl="kurkdroog"
+    export function moisture0(): number {
+        return 25
+    }
+
+    //% subcategory="Waardes"
+    //% block="dry"
+    //% block.loc.nl="droog"
+    export function moisture1(): number {
+        return 50
+    }
+
+    //% subcategory="Waardes"
+    //% block="moist"
+    //% block.loc.nl="vochtig"
+    export function moisture2(): number {
+        return 65
+    }
+
+    //% subcategory="Waardes"
+    //% block="wet"
+    //% block.loc.nl="nat"
+    export function moisture3(): number {
+        return 80
+    }
+
+    //% subcategory="Waardes"
+    //% block="soaking"
+    //% block.loc.nl="doornat"
+    export function moisture4(): number {
+        return 95
+    }
+
+    //% subcategory="Waardes"
+    //% block="dark"
+    //% block.loc.nl="donker"
+    export function light0(): number {
+        return 25
+    }
+
+    //% subcategory="Waardes"
+    //% block="dusk"
+    //% block.loc.nl="schemer"
+    export function light1(): number {
+        return 50
+    }
+
+    //% subcategory="Waardes"
+    //% block="lucid"
+    //% block.loc.nl="helder"
+    export function light2(): number {
+        return 65
+    }
+
+    //% subcategory="Waardes"
+    //% block="bright"
+    //% block.loc.nl="fel"
+    export function light3(): number {
+        return 80
+    }
+
+    //% subcategory="Waardes"
+    //% block="off"
+    //% block.loc.nl="uit"
+    export function off(): number {
+        return 0
+    }
+
+    //% subcategory="Waardes"
+    //% block="on"
+    //% block.loc.nl="aan"
+    export function on(): number {
+        return 100
     }
 }
