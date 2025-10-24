@@ -477,6 +477,7 @@ namespace GreenBox {
     //% block="display %value"
     //% block.loc.nl="toon %value"
     export function display(value: Measurement) {
+        if (!SENDDASHBOARD) return
         let str = ""
         switch (value) {
             case Measurement.Temperature:
