@@ -22,7 +22,6 @@ radio.onReceivedString(function (msg: string) {
     // char 0 :             id length
     // char 1..n :          id
     // char (18 - n)..19 :  msg chunk 
-
     let idlen: number = +msg.substr(0, 1)
     msg = msg.substr(1)
     let id = msg.substr(0, idlen)
@@ -412,10 +411,9 @@ displayHandler = () => {
     basic.showArrow(ArrowNames.West)
 }
 
-//% color="#00CC00" icon="\uf1f9"
+//% color="#00CC00" icon="\ue4bc"
 //% block="Breeding box"
 //% block.loc.nl="Kweekbakje"
-//% groups=['•']
 namespace GreenBox {
 
     let PIN_SOIL = AnalogPin.P1
