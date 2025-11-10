@@ -378,10 +378,7 @@ namespace Ledstrip {
 //###################//
 ///////////////////////
 
-let STARTED = false
-let SENDDASHBOARD = false
-basic.pause(2000) // give DHT22 time to start up
-STARTED = true
+let RUN = false
 basic.showArrow(ArrowNames.West)
 
 enum Measurement {
@@ -400,17 +397,17 @@ enum Measurement {
 }
 
 runHandler = () => {
-    SENDDASHBOARD = true
+    RUN = true
     basic.showIcon(IconNames.Heart)
 }
 
 stopHandler = () => {
-    SENDDASHBOARD = false
+    RUN = false
     basic.showArrow(ArrowNames.West)
 }
 
 displayHandler = () => {
-    SENDDASHBOARD = false
+    RUN = false
     basic.showArrow(ArrowNames.West)
 }
 
@@ -434,7 +431,7 @@ namespace GreenBox {
     export let LIGHT: number = 100 // avoid turn on leds immediately
 
     basic.forever(function() {
-        if (!STARTED) return
+        if (!RUN) return
 
         TEMPHUM = TEMPERATURE.read()
 
@@ -463,7 +460,7 @@ namespace GreenBox {
     //% block="send to the dashboard"
     //% block.loc.nl="verzend naar het dashboard"
     export function sendToDashboard() {
-        if (!SENDDASHBOARD) return
+        if (!RUN) return
         // route:
         // this greenbox >> rpi/mbit with greenbox-iot >> thingspeak dashboard
         basic.showIcon(IconNames.SmallHeart)
@@ -480,7 +477,7 @@ namespace GreenBox {
     //% block="display %value"
     //% block.loc.nl="toon %value"
     export function display(value: Measurement) {
-        if (!SENDDASHBOARD) return
+        if (!RUN) return
         let str = ""
         switch (value) {
             case Measurement.Temperature:
