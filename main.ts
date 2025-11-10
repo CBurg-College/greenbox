@@ -168,9 +168,13 @@ namespace DHT22 {
                         temp_sign = -1
                     }
                     hum = (resultArray[0] * 256 + resultArray[1]) / 10
-                    hum = Math.round(hum/2)
                     temp = (resultArray[2] * 256 + resultArray[3]) / 10 * temp_sign
-                    temp = Math.round(temp/2)
+                    if (temp > 32) {
+                        hum = hum / 2
+                        temp = temp / 2
+                    }
+                    hum = Math.round(hum)
+                    temp = Math.round(temp)
                 }
             }
 
