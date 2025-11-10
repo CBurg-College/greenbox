@@ -431,6 +431,8 @@ namespace GreenBox {
     export let LIGHT: number = 0
 
     basic.forever(function() {
+        basic.pause(5000)
+
         TEMPHUM = TEMPERATURE.read()
 
         let voltL = pins.analogReadPin(PIN_LIGHT)
@@ -444,8 +446,6 @@ namespace GreenBox {
         if (voltS > 750) voltS = 750
         let valueS = 100 - pins.map(voltS, 300, 750, 0, 100)
         MOISTURE = Math.round(valueS)
-
-        basic.pause(5000)
     })
 
     //% block="dashboard id is %id and api-key is %apikey"
