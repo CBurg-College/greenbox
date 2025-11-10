@@ -380,7 +380,7 @@ namespace Ledstrip {
 
 let STARTED = false
 let SENDDASHBOARD = false
-basic.pause(10000)
+basic.pause(2000) // give DHT22 time to start up
 STARTED = true
 basic.showArrow(ArrowNames.West)
 
@@ -429,9 +429,9 @@ namespace GreenBox {
     export let ID: string = ""
     export let APIKEY: string = ""
     export let TEMPHUM: TemperatureHumidity = [0, 0]
-    export let PUMP: number = 0
-    export let MOISTURE: number = 0
-    export let LIGHT: number = 0
+    export let PUMP: number = 0 // switch off pump initially
+    export let MOISTURE: number = 100 // avoid start pump immediately
+    export let LIGHT: number = 100 // avoid turn on leds immediately
 
     basic.forever(function() {
         if (!STARTED) return
