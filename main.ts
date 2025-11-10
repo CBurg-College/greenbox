@@ -423,7 +423,7 @@ namespace GreenBox {
     let PIN_LIGHT = AnalogPin.P2
     let PIN_PUMP = DigitalPin.P16
 
-    pins.digitalWritePin(DigitalPin.P14, LOW)
+    pins.digitalReadPin(DigitalPin.P14)
     let LEDS = Ledstrip.create(DigitalPin.P15, 8)
     export let TEMPERATURE = DHT22.create(DigitalPin.P14)
 
