@@ -415,7 +415,7 @@ displayHandler = () => {
     basic.showArrow(ArrowNames.West)
 }
 
-//% color="#00CC00" icon="\ue4bc"
+//% color="#00CC00" icon="\uf1f9"
 //% block="Breeding box"
 //% block.loc.nl="Kweekbakje"
 namespace GreenBox {
@@ -437,7 +437,7 @@ namespace GreenBox {
     basic.forever(function() {
         if (!RUN) return
 
-        TEMPHUM = TEMPERATURE.read()
+ //       TEMPHUM = TEMPERATURE.read()
 
         let voltL = pins.analogReadPin(PIN_LIGHT)
         let valueL = pins.map(voltL, 0, 1023, 0, 100)
@@ -451,7 +451,7 @@ namespace GreenBox {
         let valueS = 100 - pins.map(voltS, 300, 750, 0, 100)
         MOISTURE = Math.round(valueS)
 
-        basic.pause(5000)
+        basic.pause(100)
     })
 
     //% block="dashboard id is %id and api-key is %apikey"
