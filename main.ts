@@ -207,27 +207,15 @@ enum Lighting {
     //% block="0 %"
     //% block.loc.nl="0 %"
     Light0 = 0,
-    //% block="25 %"
-    //% block.loc.nl="25 %"
-    Light1 = 25,
-    //% block="50 %"
-    //% block.loc.nl="50 %"
-    Light2 = 50,
-    //% block="75 %"
-    //% block.loc.nl="75 %"
-    Light3 = 75,
+    //% block="33 %"
+    //% block.loc.nl="33 %"
+    Light1 = 33,
+    //% block="67 %"
+    //% block.loc.nl="67 %"
+    Light2 = 67,
     //% block="100 %"
     //% block.loc.nl="100 %"
-    Light4 = 100,
-}
-
-enum Pump {
-    //% block="on"
-    //% block.loc.nl="aan"
-    Off,
-    //% block="off"
-    //% block.loc.nl="uit"
-    On,
+    Light3 = 100,
 }
 
 let illum0Handler: handler
@@ -246,6 +234,8 @@ let PIN_LIGHT = AnalogPin.P2
 
 let ETillum = 0
 let ETmoist = 0
+
+Greenbox.swichLedsOff()
 
 basic.forever(function () {
     ETillum = Greenbox.illumination()
@@ -301,15 +291,24 @@ namespace Greenbox {
         return Math.round(val)
     }
 
-    //% block="turn %status the pump"
-    //% block.loc.nl="doe de pomp %status"
-    export function swithPump(status: Pump) {
-        pins.digitalWritePin(PIN_PUMP, status)
+    //% block="switch on the pump %sec sec"
+    //% block.loc.nl="schakel de pomp %sec sec aan"
+    export function swithPump( sec: number) {
+        pins.digitalWritePin(PIN_PUMP, HIGH)
+        General.wait(sec)
+        pins.digitalWritePin(PIN_PUMP, LOW)
     }
 
-    //% block="turn the light for %light at %color"
-    //% block.loc.nl="zet de lamp voor %light op %color"
-    export function swichLeds(light: Lighting, color: Color) {
+    //% block="turn off the light"
+    //% block.loc.nl="zet de lamp uit"
+    export function swichLedsOff() {
+        LEDS.setColor(Color.None)
+        LEDS.show()
+    }
+
+    //% block="turn on the light for %light at %color"
+    //% block.loc.nl="zet de lamp aan voor %light op %color"
+    export function swichLedsOn(light: Lighting, color: Color) {
         LEDS.setBrightness(light)
         LEDS.setColor(color)
         LEDS.show()
