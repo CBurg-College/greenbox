@@ -264,6 +264,9 @@ basic.forever(function () {
     if (moist3Handler) moist3Handler()
 })
 
+//% color="#00CC00" icon="\uf1f9"
+//% block="Breeding box"
+//% block.loc.nl="Kweekbakje"
 namespace Greenbox {
 
     //% block="when it is %illum"
