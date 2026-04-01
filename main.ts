@@ -184,7 +184,7 @@ enum Illumination {
     //% block.loc.nl="daglicht"     // 50%-75%
     Illum2,
     //% block="sunlight"
-    //% block.loc.nl="zon verlicht" // 75%-100%
+    //% block.loc.nl="zonlicht"     // 75%-100%
     Illum3,
 }
 
