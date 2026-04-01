@@ -175,53 +175,50 @@ namespace Ledstrip {
 
 enum Illumination {
     //% block="dark"
-    //% block.loc.nl="donker"
+    //% block.loc.nl="donker"   // 0%-25%
     Illum0,
     //% block="dusk"
-    //% block.loc.nl="schemer"
+    //% block.loc.nl="schemer"  // 25%-50%
     Illum1,
     //% block="lucid"
-    //% block.loc.nl="helder"
+    //% block.loc.nl="helder"   // 50%-75%
     Illum2,
     //% block="bright"
-    //% block.loc.nl="fel"
+    //% block.loc.nl="fel"      // 75%-100%
     Illum3,
 }
 
 enum Moisture {
-    //% block="bone-dry"
-    //% block.loc.nl="kurkdroog"
-    Moist0,
     //% block="dry"
-    //% block.loc.nl="droog"
-    Moist1,
+    //% block.loc.nl="droog"    // 0%-25%
+    Moist0,
     //% block="moist"
-    //% block.loc.nl="vochtig"
-    Moist2,
+    //% block.loc.nl="vochtig"  // 25%-50%
+    Moist1,
     //% block="wet"
-    //% block.loc.nl="nat"
-    Moist3,
+    //% block.loc.nl="nat"      // 50%-75%
+    Moist2,
     //% block="soaking"
-    //% block.loc.nl="doornat"
-    Moist4,
+    //% block.loc.nl="doornat"  // 75%-100%
+    Moist3,
 }
 
 enum Lighting {
     //% block="0 %"
     //% block.loc.nl="0 %"
-    Light0,
+    Light0 = 0,
     //% block="25 %"
     //% block.loc.nl="25 %"
-    Light1,
+    Light1 = 25,
     //% block="50 %"
     //% block.loc.nl="50 %"
-    Light2,
+    Light2 = 50,
     //% block="75 %"
     //% block.loc.nl="75 %"
-    Light3,
+    Light3 = 75,
     //% block="100 %"
     //% block.loc.nl="100 %"
-    Light4,
+    Light4 = 100,
 }
 
 enum Pump {
@@ -241,7 +238,6 @@ let moist0Handler: handler
 let moist1Handler: handler
 let moist2Handler: handler
 let moist3Handler: handler
-let moist4Handler: handler
 
 let LEDS = Ledstrip.create(DigitalPin.P15, 8)
 let PIN_PUMP = DigitalPin.P16
@@ -252,49 +248,58 @@ let ETillum = 0
 let ETmoist = 0
 
 basic.forever(function () {
-    ETillum = pins.analogReadPin(PIN_LIGHT)
-    ETmoist = pins.analogReadPin(PIN_SOIL)
+    ETillum = Greenbox.illumination()
+    ETmoist = Greenbox.moisture()
 
-    // illumination values: 25 50 75
     if (ETillum < 25) {
         if (illum0Handler) illum0Handler()
     }
     else
-        if (ETillum < 50) {
-            if (illum1Handler) illum1Handler()
-        }
-        else
-            if (ETillum < 75) {
-                if (illum2Handler) illum2Handler()
-            }
-            else {
-                if (illum3Handler) illum3Handler()
-            }
+    if (ETillum < 50) {
+        if (illum1Handler) illum1Handler()
+    }
+    else
+    if (ETillum < 75) {
+        if (illum2Handler) illum2Handler()
+    }
+    else {
+        if (illum3Handler) illum3Handler()
+    }
 
-
-    // moisture values: 25 45 65 85
     if (ETmoist < 25) {
         if (moist0Handler) moist0Handler()
     }
     else
-        if (ETmoist < 45) {
-            if (moist1Handler) moist1Handler()
-        }
-        else
-            if (ETmoist < 65) {
-                if (moist2Handler) moist2Handler()
-            }
-            else
-                if (ETmoist < 85) {
-                    if (moist3Handler) moist3Handler()
-                }
-    if (moist3Handler) moist3Handler()
+    if (ETmoist < 50) {
+        if (moist1Handler) moist1Handler()
+    }
+    else
+    if (ETmoist < 75) {
+        if (moist2Handler) moist2Handler()
+    }
+    else {
+        if (moist3Handler) moist3Handler()
+    }
 })
 
 //% color="#00CC00" icon="\uf1f9"
 //% block="Breeding box"
 //% block.loc.nl="Kweekbakje"
 namespace Greenbox {
+
+    export function moisture() : number {
+        let val = pins.analogReadPin(PIN_SOIL)
+        if (val < 300) val = 300
+        if (val > 750) val = 750
+        val = 100 - pins.map(val, 300, 750, 0, 100)
+        return Math.round(val)
+    }
+
+    export function illumination() : number {
+        let val = pins.analogReadPin(PIN_LIGHT)
+        val = pins.map(val, 0, 1023, 0, 100)
+        return Math.round(val)
+    }
 
     //% block="turn %status the pump"
     //% block.loc.nl="doe de pomp %status"
@@ -305,7 +310,7 @@ namespace Greenbox {
     //% block="turn the light for %light at %color"
     //% block.loc.nl="zet de lamp voor %light op %color"
     export function swichLeds(light: Lighting, color: Color) {
-        LEDS.setBrightness(light * 25)
+        LEDS.setBrightness(light)
         LEDS.setColor(color)
         LEDS.show()
     }
@@ -315,7 +320,7 @@ namespace Greenbox {
     export function showIllumination() {
         basic.showString("L")
         basic.clearScreen()
-        basic.showNumber(pins.analogReadPin(PIN_LIGHT))
+        basic.showNumber(illumination())
     }
 
     //% block="show moisture"
@@ -323,9 +328,10 @@ namespace Greenbox {
     export function showMoisture() {
         basic.showString("V")
         basic.clearScreen()
-        basic.showNumber(pins.analogReadPin(PIN_SOIL))
+        basic.showNumber(moisture())
     }
 
+    //% color="#802080"
     //% block="when it is %illum in the room"
     //% block.loc.nl="wanneer het in de kamer %illum is"
     export function onIllumination(illum: Illumination, code: () => void) {
@@ -337,6 +343,7 @@ namespace Greenbox {
         }
     }
 
+    //% color="#802080"
     //% block="when the soil is %hum"
     //% block.loc.nl="wanneer de grond %hum is"
     export function onMoisture(hum: Moisture, code: () => void) {
@@ -345,15 +352,6 @@ namespace Greenbox {
             case Moisture.Moist1: moist1Handler = code; break
             case Moisture.Moist2: moist2Handler = code; break
             case Moisture.Moist3: moist3Handler = code; break
-            case Moisture.Moist4: moist4Handler = code; break
         }
     }
 }
-
-
-//##################################
-
-basic.forever(function () {
-    Greenbox.showIllumination()
-    Greenbox.showMoisture()
-})
