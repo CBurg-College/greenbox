@@ -206,6 +206,33 @@ enum Moisture {
     Moist4,
 }
 
+enum Lighting {
+    //% block="0 %"
+    //% block.loc.nl="0 %"
+    Light0,
+    //% block="25 %"
+    //% block.loc.nl="25 %"
+    Light1,
+    //% block="50 %"
+    //% block.loc.nl="50 %"
+    Light2,
+    //% block="75 %"
+    //% block.loc.nl="75 %"
+    Light3,
+    //% block="100 %"
+    //% block.loc.nl="100 %"
+    Light4,
+}
+
+enum Pump {
+    //% block="on"
+    //% block.loc.nl="aan"
+    Off,
+    //% block="off"
+    //% block.loc.nl="uit"
+    On,
+}
+
 let illum0Handler: handler
 let illum1Handler: handler
 let illum2Handler: handler
@@ -217,7 +244,7 @@ let moist3Handler: handler
 let moist4Handler: handler
 
 let LEDS = Ledstrip.create(DigitalPin.P15, 8)
-let PIN_LED = DigitalPin.P16
+let PIN_PUMP = DigitalPin.P16
 let PIN_SOIL = AnalogPin.P1
 let PIN_LIGHT = AnalogPin.P2
 
@@ -269,27 +296,18 @@ basic.forever(function () {
 //% block.loc.nl="Kweekbakje"
 namespace Greenbox {
 
-    //% block="when it is %illum"
-    //% block.loc.nl="wanneer er %illum licht is"
-    export function onIllumination(illum: Illumination, code: () => void) {
-        switch (illum) {
-            case Illumination.Illum0: illum0Handler = code; break
-            case Illumination.Illum1: illum1Handler = code; break
-            case Illumination.Illum2: illum2Handler = code; break
-            case Illumination.Illum3: illum3Handler = code; break
-        }
+    //% block="turn %status the pump"
+    //% block.loc.nl="doe de pomp %status"
+    export function swithPump(status: Pump) {
+        pins.digitalWritePin(PIN_PUMP, status)
     }
 
-    //% block="when the soil is %hum"
-    //% block.loc.nl="wanneer grond %hum is"
-    export function onMoisture(hum: Moisture, code: () => void) {
-        switch (hum) {
-            case Moisture.Moist0: moist0Handler = code; break
-            case Moisture.Moist1: moist1Handler = code; break
-            case Moisture.Moist2: moist2Handler = code; break
-            case Moisture.Moist3: moist3Handler = code; break
-            case Moisture.Moist4: moist4Handler = code; break
-        }
+    //% block="turn the light for %light at %color"
+    //% block.loc.nl="zet de lamp voor %light op %color"
+    export function swichLeds(light: Lighting, color: Color) {
+        LEDS.setBrightness(light * 25)
+        LEDS.setColor(color)
+        LEDS.show()
     }
 
     //% block="show illumination"
@@ -306,6 +324,29 @@ namespace Greenbox {
         basic.showString("V")
         basic.clearScreen()
         basic.showNumber(pins.analogReadPin(PIN_SOIL))
+    }
+
+    //% block="when it is %illum in the room"
+    //% block.loc.nl="wanneer het in de kamer %illum is"
+    export function onIllumination(illum: Illumination, code: () => void) {
+        switch (illum) {
+            case Illumination.Illum0: illum0Handler = code; break
+            case Illumination.Illum1: illum1Handler = code; break
+            case Illumination.Illum2: illum2Handler = code; break
+            case Illumination.Illum3: illum3Handler = code; break
+        }
+    }
+
+    //% block="when the soil is %hum"
+    //% block.loc.nl="wanneer de grond %hum is"
+    export function onMoisture(hum: Moisture, code: () => void) {
+        switch (hum) {
+            case Moisture.Moist0: moist0Handler = code; break
+            case Moisture.Moist1: moist1Handler = code; break
+            case Moisture.Moist2: moist2Handler = code; break
+            case Moisture.Moist3: moist3Handler = code; break
+            case Moisture.Moist4: moist4Handler = code; break
+        }
     }
 }
 
