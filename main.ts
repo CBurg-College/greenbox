@@ -174,17 +174,17 @@ namespace Ledstrip {
 ///////////////////
 
 enum Illumination {
-    //% block="dark"
-    //% block.loc.nl="donker"   // 0%-25%
+    //% block="the dark"
+    //% block.loc.nl="het donker"   // 0%-25%
     Illum0,
-    //% block="dusk"
-    //% block.loc.nl="schemer"  // 25%-50%
+    //% block="lamplight"
+    //% block.loc.nl="lamplicht"    // 25%-50%
     Illum1,
-    //% block="lucid"
-    //% block.loc.nl="helder"   // 50%-75%
+    //% block="daylight"
+    //% block.loc.nl="daglicht"     // 50%-75%
     Illum2,
-    //% block="bright"
-    //% block.loc.nl="fel"      // 75%-100%
+    //% block="sunlight"
+    //% block.loc.nl="zon verlicht" // 75%-100%
     Illum3,
 }
 
@@ -199,7 +199,7 @@ enum Moisture {
     //% block.loc.nl="nat"      // 50%-75%
     Moist2,
     //% block="soaking"
-    //% block.loc.nl="doornat"  // 75%-100%
+    //% block.loc.nl="kletsnat" // 75%-100%
     Moist3,
 }
 
@@ -332,8 +332,8 @@ namespace Greenbox {
     }
 
     //% color="#802080"
-    //% block="when it is %illum in the room"
-    //% block.loc.nl="wanneer het in de kamer %illum is"
+    //% block="when the plant stands in %illum"
+    //% block.loc.nl="wanneer de plant in %illum staat"
     export function onIllumination(illum: Illumination, code: () => void) {
         switch (illum) {
             case Illumination.Illum0: illum0Handler = code; break
