@@ -337,8 +337,8 @@ let AHT = AHT20.create()
 let ETillum = 0
 let ETmoist = 0
 
-const ETdelay = 300000  // five minutes delay between pump activations to
-let ETtime = 0          // give the water time for soaking into the ground
+let ETdelay = 300000    // the delay between pump activations to give
+let ETtime = 0          // the water time for soaking into the ground
 
 Greenbox.swichLedsOff()
 pins.digitalWritePin(PIN_PUMP, LOW)
@@ -462,6 +462,12 @@ namespace Greenbox {
         basic.showString("V")
         basic.clearScreen()
         basic.showString(moisture().toString() + "%")
+    }
+
+    //% block="wait %min between each watering"
+    //% block.loc.nl="wacht %min tussen iedere bewatering"
+    export function delayPump(min: number) {
+        ETdelay = min * 60000
     }
 
     //% color="#802080"
