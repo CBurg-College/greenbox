@@ -432,6 +432,12 @@ namespace Greenbox {
 
     }
 
+    //% block="wait %min min between each watering"
+    //% block.loc.nl="wacht %min min tussen iedere bewatering"
+    export function delayPump(min: number) {
+        ETdelay = min * 60000
+    }
+
     //% block="show the humidity"
     //% block.loc.nl="toon de luchtvochtigheid"
     export function showHumidity() {
@@ -462,12 +468,6 @@ namespace Greenbox {
         basic.showString("V")
         basic.clearScreen()
         basic.showString(moisture().toString() + "%")
-    }
-
-    //% block="wait %min between each watering"
-    //% block.loc.nl="wacht %min tussen iedere bewatering"
-    export function delayPump(min: number) {
-        ETdelay = min * 60000
     }
 
     //% color="#802080"
