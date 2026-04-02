@@ -1,3 +1,100 @@
+////////////////
+//  INCLUDE   //
+//  AHT20.ts  //
+////////////////
+
+type TemperatureHumidity = { Temperature: number, Humidity: number }
+
+namespace AHT20 {
+
+    export class Device {
+
+        private i2caddr: number;
+
+        public constructor(address: number = 0x38) {
+            this.i2caddr = address;
+        }
+
+        init() {
+            const buf = pins.createBuffer(3);
+            buf[0] = 0xbe;
+            buf[1] = 0x08;
+            buf[2] = 0x00;
+            pins.i2cWriteBuffer(this.i2caddr, buf, false);
+            basic.pause(10);
+        }
+
+        measure() {
+            const buf = pins.createBuffer(3);
+            buf[0] = 0xac;
+            buf[1] = 0x33;
+            buf[2] = 0x00;
+            pins.i2cWriteBuffer(this.i2caddr, buf, false);
+            basic.pause(80);
+        }
+
+        status(): { Busy: boolean, Calibrated: boolean } {
+            const buf = pins.i2cReadBuffer(this.i2caddr, 1, false);
+            const busy = buf[0] & 0x80 ? true : false;
+            const calibrated = buf[0] & 0x08 ? true : false;
+            return { Busy: busy, Calibrated: calibrated };
+        }
+
+        public read(): TemperatureHumidity {
+
+            if (!this.status().Calibrated) {
+                this.init();
+                if (!this.status().Calibrated) return null;
+            }
+
+            this.measure();
+            for (let i = 0; ; ++i) {
+                if (!this.status().Busy) break;
+                if (i >= 500) return null;
+                basic.pause(10);
+            }
+            const buf = pins.i2cReadBuffer(this.i2caddr, 7, false);
+
+            const crc8 = this.crc8(buf, 0, 6);
+            if (buf[6] != crc8) return null;
+
+            const humidity = ((buf[1] << 12) + (buf[2] << 4) + (buf[3] >> 4)) * 100 / 1048576;
+            const temperature = (((buf[3] & 0x0f) << 16) + (buf[4] << 8) + buf[5]) * 200 / 1048576 - 50;
+
+            return { Temperature: temperature, Humidity: humidity };
+        }
+
+        crc8(buf: Buffer, offset: number, size: number): number {
+            let crc8 = 0xff;
+            for (let i = 0; i < size; ++i) {
+                crc8 ^= buf[offset + i];
+                for (let j = 0; j < 8; ++j) {
+                    if (crc8 & 0x80) {
+                        crc8 <<= 1;
+                        crc8 ^= 0x31;
+                    }
+                    else {
+                        crc8 <<= 1;
+                    }
+                    crc8 &= 0xff;
+                }
+            }
+
+            return crc8;
+        }
+
+    }
+
+    export function create(address: number = 0x38): Device {
+        let device = new Device(address)
+        return device
+    }
+}
+
+///////////////////
+//  END INCLUDE  //
+///////////////////
+
 ///////////////////
 //  INCLUDE      //
 //  ledstrip.ts  //
@@ -231,11 +328,13 @@ let LEDS = Ledstrip.create(DigitalPin.P15, 8)
 let PIN_PUMP = DigitalPin.P16
 let PIN_SOIL = AnalogPin.P1
 let PIN_LIGHT = AnalogPin.P2
+let AHT = AHT20.create()
 
 let ETillum = 0
 let ETmoist = 0
 
 Greenbox.swichLedsOff()
+pins.digitalWritePin(PIN_PUMP, LOW)
 
 basic.forever(function () {
     ETillum = Greenbox.illumination()
@@ -277,26 +376,26 @@ basic.forever(function () {
 //% block.loc.nl="Kweekbakje"
 namespace Greenbox {
 
-    export function moisture() : number {
-        let val = pins.analogReadPin(PIN_SOIL)
-        if (val < 300) val = 300
-        if (val > 750) val = 750
-        val = 100 - pins.map(val, 300, 750, 0, 100)
-        return Math.round(val)
+    export function humidity(): number {
+        return AHT.read().Humidity
     }
 
-    export function illumination() : number {
+    export function temperature(): number {
+        return AHT.read().Temperature
+    }
+
+    export function illumination(): number {
         let val = pins.analogReadPin(PIN_LIGHT)
         val = pins.map(val, 0, 1023, 0, 100)
         return Math.round(val)
     }
 
-    //% block="switch on the pump %sec sec"
-    //% block.loc.nl="schakel de pomp %sec sec aan"
-    export function swithPump( sec: number) {
-        pins.digitalWritePin(PIN_PUMP, HIGH)
-        General.wait(sec)
-        pins.digitalWritePin(PIN_PUMP, LOW)
+    export function moisture(): number {
+        let val = pins.analogReadPin(PIN_SOIL)
+        if (val < 300) val = 300
+        if (val > 750) val = 750
+        val = 100 - pins.map(val, 300, 750, 0, 100)
+        return Math.round(val)
     }
 
     //% block="turn off the light"
@@ -314,12 +413,36 @@ namespace Greenbox {
         LEDS.show()
     }
 
+    //% block="switch on the pump %sec sec"
+    //% block.loc.nl="schakel de pomp %sec sec aan"
+    export function swithPumpOn(sec: number) {
+        pins.digitalWritePin(PIN_PUMP, HIGH)
+        General.wait(sec)
+        pins.digitalWritePin(PIN_PUMP, LOW)
+    }
+
+    //% block="show humidity"
+    //% block.loc.nl="toon de temperatuur"
+    export function showHumidity() {
+        basic.showString("H")
+        basic.clearScreen()
+        basic.showString(AHT.read().Humidity.toString() + "%")
+    }
+
+    //% block="show temperature"
+    //% block.loc.nl="toon de temperatuur"
+    export function showTemperature() {
+        basic.showString("T")
+        basic.clearScreen()
+        basic.showString(AHT.read().Temperature.toString() + "ºC")
+    }
+
     //% block="show illumination"
     //% block.loc.nl="toon hoeveel licht"
     export function showIllumination() {
         basic.showString("L")
         basic.clearScreen()
-        basic.showNumber(illumination())
+        basic.showString(illumination().toString() + "%")
     }
 
     //% block="show moisture"
@@ -327,7 +450,7 @@ namespace Greenbox {
     export function showMoisture() {
         basic.showString("V")
         basic.clearScreen()
-        basic.showNumber(moisture())
+        basic.showString(moisture().toString() + "%")
     }
 
     //% color="#802080"
