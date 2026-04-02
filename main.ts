@@ -58,8 +58,10 @@ namespace AHT20 {
             const crc8 = this.crc8(buf, 0, 6);
             if (buf[6] != crc8) return null;
 
-            const humidity = ((buf[1] << 12) + (buf[2] << 4) + (buf[3] >> 4)) * 100 / 1048576;
-            const temperature = (((buf[3] & 0x0f) << 16) + (buf[4] << 8) + buf[5]) * 200 / 1048576 - 50;
+            let humidity = ((buf[1] << 12) + (buf[2] << 4) + (buf[3] >> 4)) * 100 / 1048576;
+            let temperature = (((buf[3] & 0x0f) << 16) + (buf[4] << 8) + buf[5]) * 200 / 1048576 - 50;
+            humidity = Math.round(humidity)
+            temperature = Math.round(temperature)
 
             return { Temperature: temperature, Humidity: humidity };
         }
@@ -421,15 +423,15 @@ namespace Greenbox {
         pins.digitalWritePin(PIN_PUMP, LOW)
     }
 
-    //% block="show humidity"
-    //% block.loc.nl="toon de temperatuur"
+    //% block="show the humidity"
+    //% block.loc.nl="toon de luchtvochtigheid"
     export function showHumidity() {
         basic.showString("H")
         basic.clearScreen()
         basic.showString(AHT.read().Humidity.toString() + "%")
     }
 
-    //% block="show temperature"
+    //% block="show the temperature"
     //% block.loc.nl="toon de temperatuur"
     export function showTemperature() {
         basic.showString("T")
@@ -437,16 +439,16 @@ namespace Greenbox {
         basic.showString(AHT.read().Temperature.toString() + "ºC")
     }
 
-    //% block="show illumination"
-    //% block.loc.nl="toon hoeveel licht"
+    //% block="show the illumination"
+    //% block.loc.nl="toon de hoeveelheid licht"
     export function showIllumination() {
         basic.showString("L")
         basic.clearScreen()
         basic.showString(illumination().toString() + "%")
     }
 
-    //% block="show moisture"
-    //% block.loc.nl="toon hoeveel grondvocht"
+    //% block="show the moisture"
+    //% block.loc.nl="toon de grondvochtigheid"
     export function showMoisture() {
         basic.showString("V")
         basic.clearScreen()
