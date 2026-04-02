@@ -42,21 +42,23 @@ namespace AHT20 {
 
         public read(): TemperatureHumidity {
 
+            const th: TemperatureHumidity = {Temperature: 999, Humidity: 999}
+
             if (!this.status().Calibrated) {
                 this.init();
-                if (!this.status().Calibrated) return null;
+                if (!this.status().Calibrated) return th;
             }
 
             this.measure();
             for (let i = 0; ; ++i) {
                 if (!this.status().Busy) break;
-                if (i >= 500) return null;
+                if (i >= 500) return th;
                 basic.pause(10);
             }
             const buf = pins.i2cReadBuffer(this.i2caddr, 7, false);
 
             const crc8 = this.crc8(buf, 0, 6);
-            if (buf[6] != crc8) return null;
+            if (buf[6] != crc8) return th;
 
             let humidity = ((buf[1] << 12) + (buf[2] << 4) + (buf[3] >> 4)) * 100 / 1048576;
             let temperature = (((buf[3] & 0x0f) << 16) + (buf[4] << 8) + buf[5]) * 200 / 1048576 - 50;
