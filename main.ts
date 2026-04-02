@@ -441,7 +441,7 @@ namespace Greenbox {
     //% block="show the humidity"
     //% block.loc.nl="toon de luchtvochtigheid"
     export function showHumidity() {
-        basic.showString("H")
+        basic.showString("R")
         basic.clearScreen()
         basic.showString(AHT.read().Humidity.toString() + "%")
     }
@@ -465,7 +465,7 @@ namespace Greenbox {
     //% block="show the moisture"
     //% block.loc.nl="toon de grondvochtigheid"
     export function showMoisture() {
-        basic.showString("V")
+        basic.showString("G")
         basic.clearScreen()
         basic.showString(moisture().toString() + "%")
     }
