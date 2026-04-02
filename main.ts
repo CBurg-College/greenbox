@@ -276,31 +276,31 @@ namespace Ledstrip {
 
 enum Illumination {
     //% block="the dark"
-    //% block.loc.nl="het donker"   // 0%-25%
+    //% block.loc.nl="het donker"
     Illum0,
     //% block="lamplight"
-    //% block.loc.nl="lamplicht"    // 25%-50%
+    //% block.loc.nl="lamplicht"
     Illum1,
     //% block="daylight"
-    //% block.loc.nl="daglicht"     // 50%-75%
+    //% block.loc.nl="daglicht"
     Illum2,
     //% block="sunlight"
-    //% block.loc.nl="zonlicht"     // 75%-100%
+    //% block.loc.nl="zonlicht"
     Illum3,
 }
 
 enum Moisture {
     //% block="dry"
-    //% block.loc.nl="droog"    // 0%-25%
+    //% block.loc.nl="droog"
     Moist0,
     //% block="moist"
-    //% block.loc.nl="vochtig"  // 25%-50%
+    //% block.loc.nl="vochtig"
     Moist1,
     //% block="wet"
-    //% block.loc.nl="nat"      // 50%-75%
+    //% block.loc.nl="nat"
     Moist2,
     //% block="soaking"
-    //% block.loc.nl="kletsnat" // 75%-100%
+    //% block.loc.nl="kletsnat"
     Moist3,
 }
 
@@ -347,30 +347,30 @@ basic.forever(function () {
     ETillum = Greenbox.illumination()
     ETmoist = Greenbox.moisture()
 
-    if (ETillum < 25) {
+    if (ETillum < 35) {
         if (illum0Handler) illum0Handler()
     }
     else
-    if (ETillum < 50) {
+    if (ETillum < 95) {
         if (illum1Handler) illum1Handler()
     }
     else
-    if (ETillum < 75) {
+    if (ETillum < 98) {
         if (illum2Handler) illum2Handler()
     }
     else {
         if (illum3Handler) illum3Handler()
     }
 
-    if (ETmoist < 25) {
+    if (ETmoist < 65) {
         if (moist0Handler) moist0Handler()
     }
     else
-    if (ETmoist < 50) {
+    if (ETmoist < 80) {
         if (moist1Handler) moist1Handler()
     }
     else
-    if (ETmoist < 75) {
+    if (ETmoist < 90) {
         if (moist2Handler) moist2Handler()
     }
     else {
