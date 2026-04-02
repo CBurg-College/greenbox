@@ -436,7 +436,7 @@ namespace Greenbox {
     export function showTemperature() {
         basic.showString("T")
         basic.clearScreen()
-        basic.showString(AHT.read().Temperature.toString() + "ºC")
+        basic.showString(AHT.read().Temperature.toString() + "C")
     }
 
     //% block="show the illumination"
