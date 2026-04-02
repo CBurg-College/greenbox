@@ -337,6 +337,9 @@ let AHT = AHT20.create()
 let ETillum = 0
 let ETmoist = 0
 
+const ETdelay = 300000  // five minutes delay between pump activations to
+let ETtime = 0          // give the water time for soaking into the ground
+
 Greenbox.swichLedsOff()
 pins.digitalWritePin(PIN_PUMP, LOW)
 
@@ -420,9 +423,13 @@ namespace Greenbox {
     //% block="switch on the pump %sec sec"
     //% block.loc.nl="schakel de pomp %sec sec aan"
     export function swithPumpOn(sec: number) {
-        pins.digitalWritePin(PIN_PUMP, HIGH)
-        General.wait(sec)
-        pins.digitalWritePin(PIN_PUMP, LOW)
+        if (ETtime < control.millis()) {
+            pins.digitalWritePin(PIN_PUMP, HIGH)
+            General.wait(sec)
+            pins.digitalWritePin(PIN_PUMP, LOW)
+            ETtime = control.millis() + ETdelay
+        }
+
     }
 
     //% block="show the humidity"
