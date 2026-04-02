@@ -379,11 +379,13 @@ basic.forever(function () {
 namespace Greenbox {
 
     export function humidity(): number {
-        return AHT.read().Humidity
+        let th = AHT.read()
+        return (th == null ? 0 : th.Humidity)
     }
 
     export function temperature(): number {
-        return AHT.read().Temperature
+        let th = AHT.read()
+        return (th == null ? 0 : th.Temperature)
     }
 
     export function illumination(): number {
