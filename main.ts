@@ -383,7 +383,7 @@ basic.forever(function () {
 //% block.loc.nl="Kweekbakje"
 namespace Greenbox {
 
-    let color = Color.White
+    let _color = Color.White
 
     export function humidity(): number {
         return AHT.read().Humidity
@@ -418,8 +418,14 @@ namespace Greenbox {
     //% block.loc.nl="zet de lamp aan voor %light"
     export function swichLedsOn(light: Lighting) {
         LEDS.setBrightness(light)
-        LEDS.setColor(color)
+        LEDS.setColor(_color)
         LEDS.show()
+    }
+
+    //% block="set the light color to %color"
+    //% block.loc.nl="stel de lampkleur in op %color"
+    export function setLedsColor(color: Color) {
+        color = _color
     }
 
     //% block="switch on the pump %sec sec"
