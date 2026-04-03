@@ -305,17 +305,17 @@ enum Moisture {
 }
 
 enum Lighting {
-    //% block="0 %"
-    //% block.loc.nl="0 %"
+    //% block="night"
+    //% block.loc.nl="nacht"
     Light0 = 0,
-    //% block="33 %"
-    //% block.loc.nl="33 %"
+    //% block="lamplight"
+    //% block.loc.nl="lamplicht"
     Light1 = 33,
-    //% block="67 %"
-    //% block.loc.nl="67 %"
+    //% block="daylight"
+    //% block.loc.nl="daglicht"
     Light2 = 67,
-    //% block="100 %"
-    //% block.loc.nl="100 %"
+    //% block="sunlight"
+    //% block.loc.nl="zonlicht"
     Light3 = 100,
 }
 
@@ -383,6 +383,8 @@ basic.forever(function () {
 //% block.loc.nl="Kweekbakje"
 namespace Greenbox {
 
+    let color = Color.White
+
     export function humidity(): number {
         return AHT.read().Humidity
     }
@@ -412,9 +414,9 @@ namespace Greenbox {
         LEDS.show()
     }
 
-    //% block="turn on the light for %light at %color"
-    //% block.loc.nl="zet de lamp aan voor %light op %color"
-    export function swichLedsOn(light: Lighting, color: Color) {
+    //% block="turn on the light to get %light"
+    //% block.loc.nl="zet de lamp aan voor %light"
+    export function swichLedsOn(light: Lighting) {
         LEDS.setBrightness(light)
         LEDS.setColor(color)
         LEDS.show()
